@@ -1,0 +1,98 @@
+#include <iostream>
+#include <cstdlib>  
+
+using namespace std;
+
+const int HAUTEUR = 27;
+const int LARGEUR = 12;
+const int VIES_INITIALES = 3;
+
+// Fonction pour afficher le terrain de jeu avec le personnage et les vies restantes
+void afficherTerrain(char terrain[HAUTEUR][LARGEUR], int posX, int posY, int vies) {
+    system("cls" or "clear");  
+
+    for (int i = 0; i < HAUTEUR; ++i) {
+        for (int j = 0; j < LARGEUR; ++j) {
+            if (i == posX && j == posY) {
+                cout << "☻";  
+            } else {
+                cout << terrain[i][j] << " ";
+            }
+        }
+        cout << endl;
+    }
+
+    cout << "Vies restantes : " << vies << endl;
+}
+
+// Fonction pour vérifier si le joueur est touché par un bloc
+bool estTouche(int posX, int posY, int blocsX[], int blocsY[], int nbBlocs) {
+    for (int i = 0; i < nbBlocs; ++i) {
+        if (posX == blocsX[i] && posY == blocsY[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Fonction principale
+int main() {
+    char terrain[HAUTEUR][LARGEUR];
+    int vies = VIES_INITIALES;
+    int blocsX[] = {5, 8, 12, 15};  // Exemple de positions des blocs
+    int blocsY[] = {2, 6, 9, 11};  
+
+    for (int i = 0; i < HAUTEUR; ++i) {
+        for (int j = 0; j < LARGEUR; ++j) {
+            terrain[i][j] = '.';
+        }
+    }
+
+    int posX = HAUTEUR / 2;  
+    int posY = LARGEUR / 2;
+
+    char direction;
+
+    while (vies > 0) {
+        afficherTerrain(terrain, posX, posY, vies);
+
+        cout << "Deplacez-vous (haut/z, bas/s, gauche/q, droite/d, quitter/e) : ";
+        cin >> direction;
+
+        switch (direction) {
+            case 'z':
+                if (posX > 0) {
+                    --posX;
+                }
+                break;
+            case 's':
+                if (posX < HAUTEUR - 1) {
+                    ++posX;
+                }
+                break;
+            case 'q':
+                if (posY > 0) {
+                    --posY;
+                }
+                break;
+            case 'd':
+                if (posY < LARGEUR - 1) {
+                    ++posY;
+                }
+                break;
+            case 'e':
+                return 0;  
+            default:
+                cout << "Direction invalide !" << endl;
+        }
+
+        // Vérifie si le joueur est touché par un bloc
+        if (estTouche(posX, posY, blocsX, blocsY, sizeof(blocsX) / sizeof(blocsX[0]))) {
+            --vies;
+        }
+    }
+
+    cout << "Game Over !" << endl;
+
+    return 0;
+}
